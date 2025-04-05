@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Titech 二段認証補助</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
+    button { font-size: 16px; padding: 10px 20px; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h2>東京工業大学 ポータル二段階認証 補助ツール</h2>
+  <p>① 以下のボタンを押して、Titech Portalにログイン（ユーザー名とパスワードを入力）してください。</p>
+  <button onclick="location.href='https://portal.nap.gsic.titech.ac.jp/GetAccess/Login?Template=userpass_key&AUTHMETHOD=UserPassword&GAREASONCODE=-1&GARESOURCEID=resourcelistID2&GAURI=https://portal.nap.gsic.titech.ac.jp/GetAccess/ResourceList%3Flang%3Dja&Reason=-1&APPID=resourcelistID2&URI=https://portal.nap.gsic.titech.ac.jp/GetAccess/ResourceList%3Flang%3Dja'">
+    Titech Portal ログインページへ
+  </button>
+
+  <hr>
+  <p>② ログイン後、マトリックス認証画面に進んだら、以下のボタンを押してください。</p>
+  <button onclick="autoFill()">三文字自動入力</button>
+
+  <script>
+    const passwordTable = {
+      A: ['C','I','K','B','R','N','J'],
+      B: ['M','R','J','J','R','D','H'],
+      C: ['E','D','E','Z','N','Z','N'],
+      D: ['C','F','B','Q','X','C','B'],
+      E: ['U','E','J','Z','F','L','O'],
+      F: ['C','L','F','Z','S','Z','Y'],
+      G: ['Y','N','I','E','T','O','P'],
+      H: ['H','L','C','E','I','W','L'],
+      I: ['X','P','U','I','R','D','M'],
+      J: ['R','O','H','Z','D','W','P']
+    };
+
+    function getCode(coord) {
+      const col = coord[0].toUpperCase();
+      const row = parseInt(coord[1]) - 1;
+      return passwordTable[col]?.[row] || '?';
+    }
+
+    function autoFill() {
+      const c1 = prompt("1つ目の座標を入力してください（例：H2）:");
+      const c2 = prompt("2つ目の座標を入力してください（例：I5）:");
+      const c3 = prompt("3つ目の座標を入力してください（例：J2）:");
+
+      const v1 = getCode(c1);
+      const v2 = getCode(c2);
+      const v3 = getCode(c3);
+
+      const inputs = document.querySelectorAll('input[type="text"]');
+      if (inputs.length < 3) {
+        alert("入力欄が見つかりません。認証画面が表示されているか確認してください。");
+        return;
+      }
+
+      inputs[0].value = v1;
+      inputs[1].value = v2;
+      inputs[2].value = v3;
+
+      alert("認証コードを自動入力しました！");
+    }
+  </script>
+</body>
+</html>
